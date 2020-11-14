@@ -21,7 +21,7 @@ A=0.05
 pixels_map = [[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)],[(0,0,255),(0,0,255),(0,0,255),(0,255,0),(0,255,0),(0,255,0),(255,0,0),(255,0,0),(255,0,0),(255,255,255)]]
 pixel_off = [(0,0,0)]*100
 
-MUSIC = 'mario2.wav'
+MUSIC = '01_TOYK.wav'
 formal_fft = []
 grid = []
 col = [0,0,0,0,0,0,0,0,0,0]
@@ -30,7 +30,7 @@ col_rfft = [0,0,0,0,0,0,0,0,0,0]
 fs, data = wavfile.read(MUSIC) # load the data
 a = data.T[0]
 a_originalsize = len(a)
-#fs = 22050
+fs = 22050
 print(a_originalsize)
 if a_originalsize%4 != 0:
     dropsamples = a_originalsize%4;
@@ -45,7 +45,7 @@ try:
     # music = pexpect.spawn("mplayer -ao alsa:device=bluealsa -delay -10 " + MUSIC)
 except KeyboardInterrupt:
     music.close()
-
+    
 slens = a_originalsize/fs
 slenms = slens*1000
 print(slens)
@@ -64,7 +64,7 @@ print(untilms)
 
 # Open a file
 fo = open("/dev/rpmsg_pru30", "wb", 0)  # Write binary unbuffered
-
+    
 # time.sleep(0.7)
 
 while True:
@@ -77,7 +77,7 @@ while True:
     # else:
     #   time.sleep(0.1)
 
-time.sleep(0.4)
+time.sleep(0.)
 
 nextms = (time.time() * 1000)
 ogtime = nextms
@@ -87,7 +87,7 @@ for i in range(0,number):
     tmp_arr = a_downsize[ind*i : (ind*(i+1)-1)]
     tmp_pre_fft = [(ele/2**7)-1 for ele in tmp_arr]
     tmp_fft = np.fft.rfft(tmp_pre_fft)
-    tmp_fft = tmp_fft[0:int(len(tmp_fft)/(2*fs/22050))]
+    tmp_fft = tmp_fft[0:int(len(tmp_fft)/2)]
     tmp_fft_right = abs(tmp_fft[:(ind-1)])
     #maxfft = max(tmp_fft_right)
     x_segment=int(math.floor(len(tmp_fft_right)/10))
@@ -100,7 +100,8 @@ for i in range(0,number):
             colNormalize[k] = (5 - math.floor(((abs(col[k]-col_avg)/col_avg)*50/10)))
         else:
             colNormalize[k] = (5 + math.floor(((abs(col[k]-col_avg)/col_avg)*50/10)))
-
+			
+			
     # send pixel
     #x = 0
     for n in range(0,10):
@@ -111,7 +112,7 @@ for i in range(0,number):
     	for m in range(0,range_max):
     		send_pixel[(9-n)*10+m] = pixels_map[n][m]
 
-
+    
     for i in range(0, len(send_pixel)):
         #r=A*255
         #g=0
@@ -120,12 +121,12 @@ for i in range(0,number):
         g = A*send_pixel[i][1]
         b = A*send_pixel[i][2]
         fo.write("%d %d %d %d\n".encode("utf-8") % (i, r, g, b))
-
+    
     fo.write("-1 0 0 0\n".encode("utf-8"))
     nowms = (time.time() * 1000)
     diff = nextms-nowms
     time.sleep(diff/1000)
-
+        
 # Close opened file
 fo.close()
 
