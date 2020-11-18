@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+# ECE434 - James Werne & Neil Roy
+# Converts mp3 to wav using ffmpeg
+
 from os import path
 from pydub import AudioSegment
 import ffmpeg

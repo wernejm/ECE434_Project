@@ -1,15 +1,18 @@
 #!/bin/bash
 
-# mplayer -ao alsa:device=bluealsa mp3/01_The_One_You_Know.mp3
-# aplay -D bluealsa filename
+# ECE434 - James Werne & Neil Roy
+# Plays either an mp3 or a wav audio file
 
+
+# if .mp3 file extension, use mplayer
 if [[ $1 == *.mp3 ]]
 then
-	echo "Success for mp3"
+	echo "Playing mp3"
 	mplayer -ao alsa:device=bluealsa $1
+# if .wav file extension, use aplay
 elif [[ $1 == *.wav ]]
 then
-	echo "Success for wav"
+	echo "Playing wav"
 	echo "If music doesn't play, make sure you're connected to your bluetooth speaker"
 	aplay -D bluealsa $1
 else
