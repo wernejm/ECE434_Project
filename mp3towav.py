@@ -2,7 +2,7 @@
 
 from os import path
 from pydub import AudioSegment
-
+import ffmpeg
 
 # files                                                                         
 src = input("Please enter the audio file you wish to be converted (include .mp3):\n")

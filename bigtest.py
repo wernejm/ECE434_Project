@@ -80,7 +80,7 @@ while True:
     # else:
     #   time.sleep(0.1)
 
-time.sleep(0.4)
+time.sleep(0.1)
 
 nextms = (time.time() * 1000)
 ogtime = nextms
