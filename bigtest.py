@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+# ECE434 - James Werne & Neil Roy
+# This was used to implement the original visualizer.py
+# This program is only used for testing purposes.
+
 import opc
 import time
 import random

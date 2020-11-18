@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # ECE434 - James Werne & Neil Roy
-# Visualizer Code
+# Visualizer Pattern 2 Code
 # We used the following as source code and rewrote it as necessary:
 #   https://github.com/Yona-Appletree/LEDscape.git
 
@@ -145,8 +145,8 @@ def visualizer():
         #   if an individual column's magnitude is above the average, increase its visual intensity (light up more LEDs)
         col_avg = np.mean(col)
         for k in range (0,10):
-            if(col_avg < 200):
-                colNormalize[k] = col[k]/5
+            if(col_avg < 200):      # if music is quiet for a bit, normalize accordingly
+                colNormalize[k] = col[k]/20
             else:
                 if(col[k] < col_avg):
                     colNormalize[k] = (5 - math.floor(((5*abs(col[k]-col_avg)/col_avg))))
