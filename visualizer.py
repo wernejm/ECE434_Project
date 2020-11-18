@@ -20,7 +20,7 @@ from scipy import signal
 
 # =================================================
 # Enter the name of the audio file you wish to play
-os.chdir('/home/debian/audio/')  # directory where the music is contained
+PATH = '/home/debian/audio/'    # directory where the music is contained
 MUSIC = 'TOYK.wav'              # audio file name (with .wav extension)
 # =================================================
 
@@ -36,6 +36,7 @@ col = np.zeros(10)
 colNormalize = np.zeros(10)
 col_rfft = np.zeros(10)
 
+os.chdir(PATH) # navigate to directory
 fs, data = wavfile.read(MUSIC) # load the data
 a = data.T[0] # transpose the data
 
